@@ -58,9 +58,25 @@ def lm(_x, _y, return_all=False):
 
 
 @list_check()
+def plot_reg_line(_x, _y, reg=lm):
+    try:
+        import matplotlib.pyplot as plt
+        import numpy as np
+    except ImportError as e:
+        raise e
+    func = reg(_x, _y)
+    _yhat = list(map(lambda x: func(x), _x))
+    plt.scatter(_x, _y)
+    plt.plot(_x, _yhat)
+    plt.show()
+    plt.close()
+
+
+@list_check()
 def residual(_x, _y, reg=lm):
     func = reg(_x, _y)
     return list(map(lambda i: _y[i] - func(_x[i]), range(len(_x))))
+
 
 @list_check()
 def plot_residual(_x, _y, res=residual):
@@ -69,4 +85,6 @@ def plot_residual(_x, _y, res=residual):
         import matplotlib.pyplot as plt
     except ImportError:
         raise ImportError('matplotlib is not installed')
-    plt.plot(_x, resd)
+    plt.scatter(_x, resd)
+    plt.show()
+    plt.close()
