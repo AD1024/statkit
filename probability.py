@@ -32,15 +32,19 @@ class Dist:
         return cls._cdf(upper, sd, mu) - cls._cdf(lower, sd, mu)
 
     @classmethod
-    def plot_norm_curve(cls, sd, mu):
+    def plot_norm_curve(cls, sd, mu, step=100):
         try:
             import matplotlib.pyplot as plt
             import numpy as np
         except ImportError:
             raise ImportError('mathplotlib is not installed')
-        _x = np.linspace(mu - 4 * sd, mu + 4 * sd + 1, 100)
+        _x = np.linspace(mu - 4 * sd, mu + 4 * sd + 1, step)
         func = lambda x: (1 / (sd * math.sqrt(2 * math.pi))) * (math.e ** (-((x - mu) ** 2) / (2 * (sd ** 2))))
         _y = list(map(func, _x))
         plt.plot(_x, _y)
         plt.show()
         plt.close()
+
+    @classmethod
+    def binom_pd(cls, cnt, size, prob):
+        pass
