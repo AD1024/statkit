@@ -1,4 +1,24 @@
-from .basic import *
+import statkit.basic as basic
+import functools
+import math
+
+mean = basic.mean
+nan = basic.nan
+list_check = basic.list_check
+
+
+def args_exclusive(ex_set=None):
+    def decorate(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kargs):
+            for i in args:
+                if i in ex_set:
+                    return nan
+            return func(*args, **kargs)
+
+        return wrapper
+
+    return decorate
 
 
 @list_check()
@@ -58,13 +78,13 @@ def lm(_x, _y, return_all=False):
 
 
 @list_check()
-def plot_reg_line(_x, _y, reg=lm):
+def plot_reg_line(_x, _y, reg_func=None, reg=lm):
     try:
         import matplotlib.pyplot as plt
         import numpy as np
     except ImportError as e:
         raise e
-    func = reg(_x, _y)
+    func = reg(_x, _y) if not reg_func else reg_func
     _yhat = list(map(lambda x: func(x), _x))
     plt.scatter(_x, _y)
     plt.plot(_x, _yhat)
@@ -88,3 +108,32 @@ def plot_residual(_x, _y, res=residual):
     plt.scatter(_x, resd)
     plt.show()
     plt.close()
+
+
+@list_check()
+def sse(_x, _y, func):
+    if len(_x) != len(_y):
+        return nan
+    return sum(map(lambda i: (_y[i] - func(_x[i])), range(_x)))
+
+
+@list_check()
+def mse(_x, _y, func):
+    return sse(_x, _y, func) / len(_x)
+
+
+@list_check
+def ssr(_x, _y, func):
+    mu_y = mean(_y)
+    return sum(map(lambda x: (func(x) - mu_y) ** 2, _x))
+
+
+@list_check()
+def sst(_y):
+    mu_y = mean(_y)
+    return sum(map(lambda x: (x - mu_y) ** 2, _y))
+
+
+@args_exclusive((0,))
+def se(_sse, size):
+    return math.sqrt(_sse / (size - 2))

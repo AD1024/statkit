@@ -138,7 +138,7 @@ def __median__(*args):
 
 
 @list_check()
-def iqr(lst):
+def iqr(lst, return_all=False):
     q_2 = median(lst)
     lst.sort()
     q_1 = median(
@@ -147,8 +147,15 @@ def iqr(lst):
     q_3 = median(
         list(filter(lambda x: x > q_2, lst))
     )
+    if return_all:
+        return {
+            'Q1': q_1,
+            'Q2': q_2,
+            'Q3': q_3,
+            'IQR': q_3 - q_1,
+        }
     return q_3 - q_1
 
 
-def __iqr__(*args):
-    return iqr(list(args))
+def __iqr__(*args, return_all=False):
+    return iqr(list(args), return_all)
