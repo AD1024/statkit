@@ -159,3 +159,11 @@ def iqr(lst, return_all=False):
 
 def __iqr__(*args, return_all=False):
     return iqr(list(args), return_all)
+
+
+def combination(n, m):
+    pass
+
+
+def permutation(n, m):
+    pass

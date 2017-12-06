@@ -67,7 +67,7 @@ def lm(_x, _y, return_all=False):
     b_0 = mu_y - b_1 * mu_x
     if return_all:
         return {
-            'formula': 'y={a}x+{b}'.format(a=b_1, b=b_0),
+            'formula': 'y={a}x+{b}'.format(a='%.3f' % b_1, b='%.3f' % b_0),
             'a': b_1,
             'b': b_0,
             'r-sqr': lr_sqr(_x, _y),
@@ -84,10 +84,12 @@ def plot_reg_line(_x, _y, reg_func=None, reg=lm):
         import numpy as np
     except ImportError as e:
         raise e
-    func = reg(_x, _y) if not reg_func else reg_func
+    reg_info = reg(_x, _y, True) if not reg_func else reg_func
+    func = reg_info['func']
     _yhat = list(map(lambda x: func(x), _x))
-    plt.scatter(_x, _y)
+    plt.scatter(_x, _y, label=reg_info['formula'])
     plt.plot(_x, _yhat)
+    plt.legend()
     plt.show()
     plt.close()
 
