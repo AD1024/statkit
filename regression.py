@@ -1,3 +1,5 @@
+"""Regression and regression analysis
+"""
 import statkit.basic as basic
 import functools
 import math

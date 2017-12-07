@@ -1,3 +1,5 @@
+"""Probability calculation and distribution calculation
+"""
 import statkit.basic as basic
 import math
 

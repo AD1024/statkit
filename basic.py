@@ -7,6 +7,12 @@ nan = math.nan
 
 
 def list_check(default_return=lambda: nan):
+    """
+    annotation function for checking whether arguments whose type is list is None or empty
+    :param default_return: lambda, if there is a parameter that is None or empty list, the function will return
+    the result of `default_return`
+    :return: decorate -> the decorated method
+    """
     def decorate(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -21,6 +27,14 @@ def list_check(default_return=lambda: nan):
 
 
 def __mean__(*args, strict=False, return_all=False):
+    """
+    calculate the mean. This function is built for using the lib in REPL
+    :return: the mean of data in `*args`
+    :usage:
+    >>> import statkit.basic as basic
+    >>> basic.__mean__(1,2,3,4)
+    2.5
+    """
     if len(args) == 1:
         args = args[0]
     return mean(args, strict=strict, return_all=return_all)
@@ -28,6 +42,23 @@ def __mean__(*args, strict=False, return_all=False):
 
 @list_check()
 def mean(lst, strict=False, return_all=False):
+    """
+    Calculate the mean in `lst`
+    :param lst: the data set
+    :param strict: if `strict` is true, the type of data in `lst` must be <number>; otherwise <str> can be accepted and
+    will be automatically converted to <number>
+    :param return_all: if `return_all` is true, the function will include the `lst` and the length(size) of the list
+    otherwise, only the mean will be returned
+    :return: the mean in `lst`
+    :usage:
+    >>> import statkit.basic as basic
+    >>> basic.mean([1,2,3,4])
+    2.5
+    >>> basic.mean([1,2,3,'4'], strict=True)
+    2.5
+    >>> basic.mean([1,2,3,4], return_all=True)
+    (2.5, [1.0, 2.0, 3.0, 4.0], 4)
+    """
     try:
         lst = list(map(lambda x: float(x), lst))
     except ValueError:
@@ -50,6 +81,19 @@ def __var__(*args, strict=False, is_population=False):
 
 
 def var(lst, strict=False, is_population=False):
+    """
+    Calculate the variance of data in `lst`
+    :param lst: the data set
+    :param strict: see `help(basic.mean)`
+    :param is_population: indicate whether the data is a set of population data
+    :return: the variance of `lst`
+    :usage:
+    >>> import statkit.basic as basic
+    >>> basic.var([1,2,3,4])
+    1.6666666666666667
+    >>> basic.var([1,2,3,4], is_population=True)
+    1.25
+    """
     mu, data, size = mean(lst, strict=strict, return_all=True)
     if mu == nan and data == nan and size == nan:
         return nan
@@ -70,6 +114,13 @@ def __sd__(*args, strict=False, is_population=False):
 
 
 def sd(lst, strict=False, is_population=False):
+    """
+    Calculate the standard deviation of the data in `lst`
+    :param lst: the data set
+    :param strict: see `help(basic.mean)`
+    :param is_population: see `help(basic.var)`
+    :return: the standard deviation
+    """
     variance = var(lst, strict=strict, is_population=is_population)
     return math.sqrt(variance)
 
@@ -80,6 +131,20 @@ def __mode__(*args, return_all=False):
 
 @list_check()
 def mode(lst, return_all=False):
+    """
+    Find the mode of `lst`
+    :param lst: the data set
+    :param return_all: if `return_all` is True, the function will return the mode and its number of occurrence
+    :return: the mode
+    :usage:
+    >>> import statkit.basic as basic
+    >>> basic.mode([1,1,2,3,4])
+    1
+    >>> basic.mode([1,1,2,2,3,4])
+    (1,2)
+    >>> basic.mode([1,1,2,2,3,4], return_all=True)
+    ((1,2), 2)
+    """
     _m = {}
     for i in lst:
         if i in _m.keys():
@@ -101,6 +166,7 @@ def mode(lst, return_all=False):
             _append(i[1][0])
         else:
             break
+    ans = tuple(ans)
     if return_all:
         return (ans[0], _m[ans[0]]) if len(ans) == 1 else (ans, _m[ans[0]])
     return ans[0] if len(ans) == 1 else ans
