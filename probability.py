@@ -17,7 +17,7 @@ def var(_x, _p):
     return sum(map(lambda i: _p[i] * (_x[i] - mu) ** 2), range(len(_x)))
 
 
-class Dist:
+class dist:
     @classmethod
     def norm_pd(cls, _x, sd, mu):
         return (1 / (sd * math.sqrt(2 * math.pi))) * (math.e ** (-((_x - mu) ** 2) / (2 * (sd ** 2))))
