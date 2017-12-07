@@ -173,7 +173,7 @@ def permutation(n, m):
     return math.factorial(n) // math.factorial(n - m)
 
 
-def invbeta(x, a, b):
+def incbeta(x, a, b):
     if x < 0.0 or x > 1.0:
         return nan
     if x > (a + 1.0) / (a + b + 2.0):
