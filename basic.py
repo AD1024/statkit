@@ -162,8 +162,47 @@ def __iqr__(*args, return_all=False):
 
 
 def combination(n, m):
-    pass
+    if n < m:
+        return nan
+    return math.factorial(n) // (math.factorial(m) * math.factorial(n - m))
 
 
 def permutation(n, m):
-    pass
+    if n < m:
+        return nan
+    return math.factorial(n) // math.factorial(n - m)
+
+
+def invbeta(x, a, b):
+    if x < 0.0 or x > 1.0:
+        return nan
+    if x > (a + 1.0) / (a + b + 2.0):
+        return 1.0 - invbeta(1.0 - x, b, a)
+    lbeta_ab = math.lgamma(a) + math.lgamma(b) - math.lgamma(a + b)
+    front = math.exp(math.log(x) * a + math.log(1.0 - x) * b - lbeta_ab)
+    f = c = 1.0
+    d = 0.0
+    for i in range(0, 201):
+        m = i >> 1
+        numerator = 0.0
+        if i == 0:
+            numerator = 1.0
+        elif i & 1:
+            numerator = (m * (b - m) * x) / ((a + 2.0 * m - 1.0) * (a + 2.0 * m))
+        else:
+            numerator = -((a + m) * (a + b + m) * x) / ((a + 2.0 * m) * (a + 2.0 * m + 1))
+
+        d = 1.0 + numerator * d
+        if math.fabs(d) < 1e-30:
+            d = 1e-30
+        d = 1.0 / d
+
+        c = 1.0 + numerator / c
+        if math.fabs(c) < 1e-30:
+            c = 1e-30
+
+        cd = c * d
+        f *= cd
+        if math.fabs(1.0 - cd) < 1e-8:
+            return front * (f - 1.0)
+    return math.inf
