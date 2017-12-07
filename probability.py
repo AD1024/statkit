@@ -47,4 +47,16 @@ class Dist:
 
     @classmethod
     def binom_pd(cls, cnt, size, prob):
-        pass
+        if size == 0 or cnt > size:
+            return basic.nan
+        return basic.combination(size, cnt) * (prob ** cnt) * ((1.0 - prob) ** (size - cnt))
+
+    @classmethod
+    def binom_cd(cls, cnt, size, prob):
+        if size == 0 or cnt > size:
+            return basic.nan
+        ans = 0
+        for i in range(0, cnt+1):
+            ans += cls.binom_pd(i, size, prob)
+        return ans
+
