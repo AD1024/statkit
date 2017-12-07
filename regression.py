@@ -124,7 +124,7 @@ def mse(_x, _y, func):
     return sse(_x, _y, func) / len(_x)
 
 
-@list_check
+@list_check()
 def ssr(_x, _y, func):
     mu_y = mean(_y)
     return sum(map(lambda x: (func(x) - mu_y) ** 2, _x))
