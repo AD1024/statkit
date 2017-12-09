@@ -243,7 +243,7 @@ def incbeta(x, a, b):
     if x < 0.0 or x > 1.0:
         return nan
     if x > (a + 1.0) / (a + b + 2.0):
-        return 1.0 - invbeta(1.0 - x, b, a)
+        return 1.0 - incbeta(1.0 - x, b, a)
     lbeta_ab = math.lgamma(a) + math.lgamma(b) - math.lgamma(a + b)
     front = math.exp(math.log(x) * a + math.log(1.0 - x) * b - lbeta_ab)
     f = c = 1.0
