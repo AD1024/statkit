@@ -6,24 +6,35 @@ import functools
 nan = math.nan
 
 
-def list_check(default_return=lambda: nan):
+def list_check(default_return=nan):
     """
     annotation function for checking whether arguments whose type is list is None or empty
     :param default_return: lambda, if there is a parameter that is None or empty list, the function will return
     the result of `default_return`
     :return: decorate -> the decorated method
     """
+
     def decorate(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             for i in args:
                 if not i and isinstance(i, list) and len(i) == 0:
-                    return default_return()
+                    return default_return
             return func(*args, **kwargs)
 
         return wrapper
 
     return decorate
+
+
+@list_check()
+def reduce(func, lst):
+    if len(lst) == 1:
+        return lst[0]
+    ans = func(lst[0], lst[1])
+    for i in lst[2:]:
+        ans = func(ans, i)
+    return ans
 
 
 def __mean__(*args, strict=False, return_all=False):
@@ -173,6 +184,12 @@ def mode(lst, return_all=False):
 
 
 def z_score(x, lst):
+    """
+    Calculate the standard score for `x` in `lst`
+    :param x: target variable
+    :param lst: ultimate set of data
+    :return: the standard score of `x`
+    """
     if not lst or not len(lst):
         return nan
     mu = mean(lst)
@@ -182,6 +199,11 @@ def z_score(x, lst):
 
 @list_check()
 def b_range(lst):
+    """
+    calculate the range of `lst`
+    :param lst: the ultimate data set
+    :return:
+    """
     return max(lst) - min(lst)
 
 
@@ -230,13 +252,19 @@ def __iqr__(*args, return_all=False):
 def combination(n, m):
     if n < m:
         return nan
-    return math.factorial(n) // (math.factorial(m) * math.factorial(n - m))
+    if not m:
+        return 1
+    # return math.factorial(n) // (math.factorial(m) * math.factorial(n - m))
+    return reduce(lambda x, y: x * y, range(m + 1, n + 1)) // reduce(lambda x, y: x * y, range(1, n - m + 1))
 
 
 def permutation(n, m):
     if n < m:
         return nan
-    return math.factorial(n) // math.factorial(n - m)
+    if not m:
+        return 1
+    # return math.factorial(n) // math.factorial(n - m)
+    return reduce(lambda x, y: x * y, range(n - m + 1, n + 1))
 
 
 def incbeta(x, a, b):
