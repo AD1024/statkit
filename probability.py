@@ -3,6 +3,11 @@
 import statkit.basic as _basic
 import math as _math
 
+try:
+	inf = _math.inf
+except AttributeError:
+	inf = float('inf')
+
 
 @_basic.list_check()
 def expected(_x, _p):
@@ -29,7 +34,7 @@ class dist:
         return 0.5 * (1 + _math.erf((x - mu) / (sd * _math.sqrt(2))))
 
     @classmethod
-    def norm_cd(cls, sd, mu, lower=-_math.inf, upper=_math.inf):
+    def norm_cd(cls, sd, mu, lower=-inf, upper=inf):
         lower, upper = (lower, upper) if lower <= upper else (upper, lower)
         return cls._cdf(upper, sd, mu) - cls._cdf(lower, sd, mu)
 

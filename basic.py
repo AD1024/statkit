@@ -3,7 +3,11 @@
 import math
 import functools
 
-nan = math.nan
+try:
+	nan = math.nan
+except AttributeError:
+	nan = float('inf') - float('inf')
+	
 
 
 def list_check(default_return=nan):
