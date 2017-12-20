@@ -33,6 +33,10 @@ class dist:
         lower, upper = (lower, upper) if lower <= upper else (upper, lower)
         return cls._cdf(upper, sd, mu) - cls._cdf(lower, sd, mu)
 
+    # @classmethod
+    # def inv_norm_cd(cls, x, sd, mu):
+    #     return _math.sqrt((sd / (2 * _math.pi * (x ** 3)))) * _math.exp((-sd * (x - mu) ** 2) / 2 * (mu ** 2) * x)
+
     @classmethod
     def plot_norm_curve(cls, sd, mu, step=100):
         try:

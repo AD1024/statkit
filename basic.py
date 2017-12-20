@@ -27,16 +27,6 @@ def list_check(default_return=nan):
     return decorate
 
 
-@list_check()
-def reduce(func, lst):
-    if len(lst) == 1:
-        return lst[0]
-    ans = func(lst[0], lst[1])
-    for i in lst[2:]:
-        ans = func(ans, i)
-    return ans
-
-
 def __mean__(*args, strict=False, return_all=False):
     """
     calculate the mean. This function is built for using the lib in REPL
@@ -255,7 +245,8 @@ def combination(n, m):
     if not m:
         return 1
     # return math.factorial(n) // (math.factorial(m) * math.factorial(n - m))
-    return reduce(lambda x, y: x * y, range(m + 1, n + 1)) // reduce(lambda x, y: x * y, range(1, n - m + 1))
+    return functools.reduce(lambda x, y: x * y, range(m + 1, n + 1)) // \
+           functools.reduce(lambda x, y: x * y, range(1, n - m + 1))
 
 
 def permutation(n, m):
@@ -264,7 +255,7 @@ def permutation(n, m):
     if not m:
         return 1
     # return math.factorial(n) // math.factorial(n - m)
-    return reduce(lambda x, y: x * y, range(n - m + 1, n + 1))
+    return functools.reduce(lambda x, y: x * y, range(n - m + 1, n + 1))
 
 
 def incbeta(x, a, b):
