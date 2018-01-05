@@ -4,9 +4,9 @@ import statkit.basic as _basic
 import math as _math
 
 try:
-	inf = _math.inf
+    inf = _math.inf
 except AttributeError:
-	inf = float('inf')
+    inf = float('inf')
 
 
 @_basic.list_check()
@@ -67,7 +67,6 @@ class dist:
         if size == 0 or cnt > size:
             return _basic.nan
         ans = 0
-        for i in range(0, cnt+1):
+        for i in range(0, cnt + 1):
             ans += cls.binom_pd(i, size, prob)
         return ans
-

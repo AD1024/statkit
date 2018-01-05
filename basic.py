@@ -4,10 +4,9 @@ import math
 import functools
 
 try:
-	nan = math.nan
+    nan = math.nan
 except AttributeError:
-	nan = float('inf') - float('inf')
-	
+    nan = float('inf') - float('inf')
 
 
 def list_check(default_return=nan):
